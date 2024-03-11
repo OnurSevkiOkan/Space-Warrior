@@ -1,4 +1,4 @@
-﻿#include <raylib.h>
+#include <raylib.h>
 #include "variables.h"
 #include <cmath> // sqrt and pow 
 
@@ -14,7 +14,6 @@ public:
     {
         Texture2D spaceship = LoadTexture("resources/gray3.png");
 
-        // Hareket vektörünü hesapla
         Vector2 movement = { 0, 0 };
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
         {
@@ -33,7 +32,6 @@ public:
             movement.y += speed;
         }
 
-        // Vektörün büyüklüğünü hesapla
         float magnitude = sqrt(pow(movement.x, 2) + pow(movement.y, 2));
 
         // Normalize the vector
@@ -43,10 +41,23 @@ public:
             movement.y /= magnitude;
         }
 
-        // Hareket vektörünü hızla çarp ve pozisyonu güncelle
         position.x += movement.x * speed;
         position.y += movement.y * speed;
+    }
 
-        DrawTexture(spaceship, position.x, position.y, WHITE);
+    void point_cursor(Vector2 position)
+    {
+        Texture2D spaceship = LoadTexture("resources/gray3.png");
+
+        float point_x = GetMouseX() - position.x;
+        float point_y = GetMouseY() - position.y;
+        float rotation = atan2(point_y, point_x) * 57.29578f; // Corrected atan2 calculation
+
+        DrawTexturePro(spaceship,
+            Rectangle{ 0, 0, (float)spaceship.width, (float)spaceship.height },
+            { position.x, position.y, (float)spaceship.width , (float)spaceship.height },
+            { player_width / 2, player_height / 2 },
+            rotation+90,
+            WHITE);
     }
 };
